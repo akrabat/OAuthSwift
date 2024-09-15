@@ -106,8 +106,8 @@ open class OAuthSwiftClient: NSObject {
     }
 
     @discardableResult
-    public func postImage(_ url: URLConvertible, parameters: OAuthSwift.Parameters, image: Data, completionHandler completion: OAuthSwiftHTTPRequest.CompletionHandler?) -> OAuthSwiftRequestHandle? {
-        return self.multiPartRequest(url: url, method: .POST, parameters: parameters, image: image, completionHandler: completion)
+    public func postImage(_ url: URLConvertible, parameters: OAuthSwift.Parameters, image: Data, keyName: String = "media", completionHandler completion: OAuthSwiftHTTPRequest.CompletionHandler?) -> OAuthSwiftRequestHandle? {
+        return self.multiPartRequest(url: url, method: .POST, parameters: parameters, image: image, keyName: keyName, completionHandler: completion)
     }
 
     open func makeMultiPartRequest(_ url: URLConvertible, method: OAuthSwiftHTTPRequest.Method, parameters: OAuthSwift.Parameters = [:], multiparts: [OAuthSwiftMultipartData] = [], headers: OAuthSwift.Headers? = nil) -> OAuthSwiftHTTPRequest? {
@@ -121,8 +121,8 @@ open class OAuthSwiftClient: NSObject {
         return makeRequest(url, method: method, parameters: parameters, headers: finalHeaders, body: body)
     }
 
-    func multiPartRequest(url: URLConvertible, method: OAuthSwiftHTTPRequest.Method, parameters: OAuthSwift.Parameters, image: Data, completionHandler completion: OAuthSwiftHTTPRequest.CompletionHandler?) -> OAuthSwiftRequestHandle? {
-        let multiparts = [ OAuthSwiftMultipartData(name: "media", data: image, fileName: "file", mimeType: "image/jpeg") ]
+    func multiPartRequest(url: URLConvertible, method: OAuthSwiftHTTPRequest.Method, parameters: OAuthSwift.Parameters, image: Data, keyName: String = "media", completionHandler completion: OAuthSwiftHTTPRequest.CompletionHandler?) -> OAuthSwiftRequestHandle? {
+        let multiparts = [ OAuthSwiftMultipartData(name: keyName, data: image, fileName: "file", mimeType: "image/jpeg") ]
         guard let request = makeMultiPartRequest(url, method: method, parameters: parameters, multiparts: multiparts) else {
             return nil
         }
